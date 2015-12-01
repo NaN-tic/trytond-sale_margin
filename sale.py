@@ -6,7 +6,6 @@ from math import fabs
 from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
-from trytond.transaction import Transaction
 from trytond.config import config as config_
 
 __all__ = ['Sale', 'SaleLine']
