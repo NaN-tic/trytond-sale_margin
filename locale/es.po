@@ -1,6 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:sale.configuration,sale_margin_method:"
+msgid "Sale Margin Method"
+msgstr "Método margen venta"
 
 msgctxt "field:sale.line,cost_price:"
 msgid "Cost Price"
@@ -37,6 +41,14 @@ msgid ""
 msgstr ""
 "Proporciona la rentabilidad calculando la diferencia entre el precio unidad "
 "y el precio de coste."
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Cost Price"
+msgstr "Precio de coste"
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Unit Price"
+msgstr "Precio unitario"
 
 msgctxt "view:sale.line:"
 msgid "%"

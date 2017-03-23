@@ -130,6 +130,10 @@ Sale with 1 product::
     Decimal('10.00')
     >>> sale.margin_percent
     Decimal('1.0000')
+    >>> sale_line.margin
+    Decimal('10.00')
+    >>> sale_line.margin_percent
+    Decimal('1.0000')
 
 Add second product and a subtotal::
 
@@ -180,4 +184,39 @@ Confirm sale and check cache is done::
     >>> sale.margin and sale.margin == sale.margin_cache
     True
     >>> sale.margin_percent and sale.margin_percent == sale.margin_percent_cache
+    True
+
+Change sale configuration::
+
+    >>> Configuration = Model.get('sale.configuration')
+    >>> configuration = Configuration(1)
+    >>> configuration.sale_margin_method = 'unit_price'
+    >>> configuration.save()
+
+Sale margin with and percentatge with unit price method::
+
+    >>> sale2 = Sale()
+    >>> sale2.party = customer
+    >>> sale2.payment_term = payment_term
+    >>> sale2_line = SaleLine()
+    >>> sale2.lines.append(sale2_line)
+    >>> sale2_line.product = product
+    >>> sale2_line.quantity = 2
+    >>> sale2.save()
+    >>> sale2.margin
+    Decimal('10.00')
+    >>> sale2.margin_percent
+    Decimal('0.5000')
+    >>> sale2_line.margin
+    Decimal('10.00')
+    >>> sale2_line.margin_percent
+    Decimal('0.5000')
+
+Confirm sale2 and check cache is done::
+
+    >>> Sale.quote([sale2.id], config.context)
+    >>> Sale.confirm([sale2.id], config.context)
+    >>> sale2.margin and sale2.margin == sale2.margin_cache
+    True
+    >>> sale2.margin_percent and sale2.margin_percent == sale2.margin_percent_cache
     True

@@ -30,6 +30,15 @@ class Sale:
     margin_percent_cache = fields.Numeric('Margin (%) Cache',
         digits=(16, 4), readonly=True)
 
+    @classmethod
+    def copy(cls, sales, default=None):
+        if default is None:
+            default = {}
+        default = default.copy()
+        default['margin_cache'] = None
+        default['margin_percent_cache'] = None
+        return super(Sale, cls).copy(sales, default=default)
+
     def get_margin(self, name):
         '''
         Return the margin of each sales
@@ -43,15 +52,21 @@ class Sale:
         return Currency.round(self.currency, margin)
 
     def get_margin_percent(self, name):
+        Configuration = Pool().get('sale.configuration')
+
+        config = Configuration(1)
+        sale_margin_method = config.sale_margin_method
+
         if (self.state in self._states_cached
                 and self.margin_percent_cache is not None):
             return self.margin_percent_cache
 
-        cost = sum(
-            Decimal(str(fabs(l.quantity))) * (l.cost_price or Decimal(0))
+        price = sum(
+            Decimal(str(fabs(l.quantity))) * (
+                getattr(l, sale_margin_method) or Decimal(0))
             for l in self.lines if l.type == 'line')
-        if cost:
-            return (self.margin / cost).quantize(Decimal('0.0001'))
+        if price:
+            return (self.margin / price).quantize(Decimal('0.0001'))
         else:
             return Decimal('1.0')
 
@@ -137,9 +152,14 @@ class SaleLine:
         else:
             return Decimal(0)
 
-    @fields.depends('type', 'quantity', 'cost_price', '_parent_sale.currency',
-        '_parent_sale.lines', methods=['margin'])
+    @fields.depends('type', 'quantity', 'cost_price', 'unit_price',
+        '_parent_sale.currency', '_parent_sale.lines', methods=['margin'])
     def on_change_with_margin_percent(self, name=None):
+        Configuration = Pool().get('sale.configuration')
+
+        config = Configuration(1)
+        sale_margin_method = config.sale_margin_method
+
         if self.type not in ('line', 'subtotal'):
             return
         self.margin = self.on_change_with_margin()
@@ -148,23 +168,35 @@ class SaleLine:
         if self.type == 'line':
             if not self.quantity:
                 return
-            if not self.cost_price:
+            if sale_margin_method == 'cost_price' and not self.cost_price:
                 return Decimal('1.0')
-            cost = self.get_cost_price()
-            return (self.margin / cost).quantize(Decimal('0.0001'))
+            if sale_margin_method == 'unit_price' and not self.unit_price:
+                return Decimal('1.0')
+            if sale_margin_method == 'unit_price':
+                price = self.get_unit_price()
+            else:
+                price = self.get_cost_price()
+            return (self.margin / price).quantize(Decimal('0.0001'))
         else:
-            cost = Decimal(0)
+            price = Decimal(0)
             for line2 in self.sale.lines:
                 if self == line2:
-                    if not cost:
+                    if not price:
                         return Decimal('1.0')
                     else:
-                        return (self.margin / cost).quantize(Decimal('0.0001'))
+                        return (self.margin / price).quantize(Decimal('0.0001'))
                 if line2.type == 'line':
-                    cost += line2.get_cost_price()
+                    if sale_margin_method == 'unit_price':
+                        price += line2.get_unit_price()
+                    else:
+                        price += line2.get_cost_price()
                 elif line2.type == 'subtotal':
-                    cost = Decimal(0)
+                    price = Decimal(0)
 
     def get_cost_price(self):
         return Decimal(str(fabs(self.quantity))) * (self.cost_price or
+                Decimal(0))
+
+    def get_unit_price(self):
+        return Decimal(str(fabs(self.quantity))) * (self.unit_price or
                 Decimal(0))
