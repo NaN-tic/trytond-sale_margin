@@ -55,7 +55,7 @@ class Sale:
         Configuration = Pool().get('sale.configuration')
 
         config = Configuration(1)
-        sale_margin_method = config.sale_margin_method
+        sale_margin_method = config.sale_margin_method or 'cost_price'
 
         if (self.state in self._states_cached
                 and self.margin_percent_cache is not None):
@@ -158,7 +158,7 @@ class SaleLine:
         Configuration = Pool().get('sale.configuration')
 
         config = Configuration(1)
-        sale_margin_method = config.sale_margin_method
+        sale_margin_method = config.sale_margin_method or 'cost_price'
 
         if self.type not in ('line', 'subtotal'):
             return
@@ -173,9 +173,9 @@ class SaleLine:
             if sale_margin_method == 'unit_price' and not self.unit_price:
                 return Decimal('1.0')
             if sale_margin_method == 'unit_price':
-                price = self.get_unit_price()
+                price = self.get_margin_unit_price()
             else:
-                price = self.get_cost_price()
+                price = self.get_margin_cost_price()
             return (self.margin / price).quantize(Decimal('0.0001'))
         else:
             price = Decimal(0)
@@ -187,16 +187,16 @@ class SaleLine:
                         return (self.margin / price).quantize(Decimal('0.0001'))
                 if line2.type == 'line':
                     if sale_margin_method == 'unit_price':
-                        price += line2.get_unit_price()
+                        price += line2.get_margin_unit_price()
                     else:
-                        price += line2.get_cost_price()
+                        price += line2.get_margin_cost_price()
                 elif line2.type == 'subtotal':
                     price = Decimal(0)
 
-    def get_cost_price(self):
+    def get_margin_cost_price(self):
         return Decimal(str(fabs(self.quantity))) * (self.cost_price or
                 Decimal(0))
 
-    def get_unit_price(self):
+    def get_margin_unit_price(self):
         return Decimal(str(fabs(self.quantity))) * (self.unit_price or
                 Decimal(0))
