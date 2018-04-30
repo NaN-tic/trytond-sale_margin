@@ -1,0 +1,46 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:sale.line,cost_price:"
+msgid "Cost Price"
+msgstr "Kostenpreis"
+
+msgctxt "field:sale.line,margin:"
+msgid "Margin"
+msgstr "Marge"
+
+msgctxt "field:sale.line,margin_percent:"
+msgid "Margin (%)"
+msgstr "Marge (%)"
+
+msgctxt "field:sale.sale,margin:"
+msgid "Margin"
+msgstr "Marge"
+
+msgctxt "field:sale.sale,margin_cache:"
+msgid "Margin Cache"
+msgstr "Marge Cache"
+
+msgctxt "field:sale.sale,margin_percent:"
+msgid "Margin (%)"
+msgstr "Marge (%)"
+
+msgctxt "field:sale.sale,margin_percent_cache:"
+msgid "Margin (%) Cache"
+msgstr "Marge (%)"
+
+msgctxt "help:sale.sale,margin:"
+msgid ""
+"It gives profitability by calculating the difference between the Unit Price "
+"and Cost Price."
+msgstr ""
+"Berechnet die Marge aus der Differenz von Kostenpreis und Verkaufspreis."
+
+msgctxt "view:sale.line:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:sale.sale:"
+msgid "%"
+msgstr "%"
