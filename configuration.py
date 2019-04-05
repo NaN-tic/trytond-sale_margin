@@ -30,6 +30,35 @@ class Configuration:
         return cls.multivalue_model(
             'sale_margin_method').default_sale_margin_method()
 
+    @classmethod
+    def __setup__(cls):
+        super(Configuration, cls).__setup__()
+        cls._error_messages.update({
+                'change_sale_margin_method': ('You cannot change the sale '
+                    'margin method because has sales.'),
+                })
+        cls._modify_no_sale = [
+            ('sale_margin_method', 'change_sale_margin_method'),
+            ]
+
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+        for _, values in zip(actions, actions):
+            for field, error in cls._modify_no_sale:
+                    if field in values:
+                        cls.check_no_sale(error)
+                        break
+        super(Configuration, cls).write(*args)
+
+    @classmethod
+    def check_no_sale(cls, error):
+        Sale = Pool().get('sale.sale')
+
+        sales = Sale.search([], limit=1, order=[])
+        if sales:
+            cls.raise_user_error(error)
+
 
 class ConfigurationSaleMethod:
     __metaclass__ = PoolMeta

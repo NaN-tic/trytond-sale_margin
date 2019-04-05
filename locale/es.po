@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:sale.configuration:"
+msgid "You cannot change the sale margin method because has sales."
+msgstr "No puede cambiar el método de margen de venta porque ya existen ventas."
+
 msgctxt "field:sale.configuration,sale_margin_method:"
 msgid "Sale Margin Method"
 msgstr "Método margen venta"
