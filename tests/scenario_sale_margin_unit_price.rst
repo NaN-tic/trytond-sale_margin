@@ -112,75 +112,40 @@ Create payment term::
     >>> payment_term = create_payment_term()
     >>> payment_term.save()
 
-Sale with 1 product::
+Change sale configuration::
+
+    >>> Configuration = Model.get('sale.configuration')
+    >>> configuration = Configuration(1)
+    >>> configuration.sale_margin_method = 'unit_price'
+    >>> configuration.save()
+
+Sale margin with and percentatge with unit price method::
 
     >>> config.user = sale_user.id
     >>> Sale = Model.get('sale.sale')
     >>> SaleLine = Model.get('sale.line')
-    >>> sale = Sale()
-    >>> sale.party = customer
-    >>> sale.payment_term = payment_term
-    >>> sale_line = SaleLine()
-    >>> sale.lines.append(sale_line)
-    >>> sale_line.product = product
-    >>> sale_line.quantity = 2
-    >>> sale.save()
-    >>> sale.margin
+    >>> sale2 = Sale()
+    >>> sale2.party = customer
+    >>> sale2.payment_term = payment_term
+    >>> sale2_line = SaleLine()
+    >>> sale2.lines.append(sale2_line)
+    >>> sale2_line.product = product
+    >>> sale2_line.quantity = 2
+    >>> sale2.save()
+    >>> sale2.margin
     Decimal('10.00')
-    >>> sale.margin_percent
-    Decimal('1.0000')
-    >>> sale_line.margin
+    >>> sale2.margin_percent
+    Decimal('0.5000')
+    >>> sale2_line.margin
     Decimal('10.00')
-    >>> sale_line.margin_percent
-    Decimal('1.0000')
+    >>> sale2_line.margin_percent
+    Decimal('0.5000')
 
-Add second product and a subtotal::
+Confirm sale2 and check cache is done::
 
-    >>> sale_line = SaleLine()
-    >>> sale.lines.append(sale_line)
-    >>> sale_line.product = product2
-    >>> sale_line.quantity = 4
-    >>> sale.save()
-    >>> sale_line.margin
-    Decimal('300.00')
-    >>> sale_line.margin_percent
-    Decimal('15.0000')
-    >>> sale.margin
-    Decimal('310.00')
-    >>> sale.margin_percent
-    Decimal('10.3333')
-
-Add subtotal and a line without product::
-
-    >>> sale_line = SaleLine()
-    >>> sale.lines.append(sale_line)
-    >>> sale_line.type = 'subtotal'
-    >>> sale_line.description = 'Subtotal'
-    >>> sale_line2 = SaleLine()
-    >>> sale.lines.append(sale_line2)
-    >>> sale_line2.description = 'New product'
-    >>> sale_line2.quantity = 2
-    >>> sale_line2.cost_price = Decimal('100')
-    >>> sale_line2.unit_price = Decimal('125')
-    >>> sale.save()
-    >>> sale_line.margin
-    Decimal('310.00')
-    >>> sale_line.margin_percent
-    Decimal('10.3333')
-    >>> sale_line2.margin
-    Decimal('50.00')
-    >>> sale_line2.margin_percent
-    Decimal('0.2500')
-    >>> sale.margin
-    Decimal('360.00')
-    >>> sale.margin_percent
-    Decimal('1.5652')
-
-Confirm sale and check cache is done::
-
-    >>> Sale.quote([sale.id], config.context)
-    >>> Sale.confirm([sale.id], config.context)
-    >>> sale.margin and sale.margin == sale.margin_cache
+    >>> Sale.quote([sale2.id], config.context)
+    >>> Sale.confirm([sale2.id], config.context)
+    >>> sale2.margin and sale2.margin == sale2.margin_cache
     True
-    >>> sale.margin_percent and sale.margin_percent == sale.margin_percent_cache
+    >>> sale2.margin_percent and sale2.margin_percent == sale2.margin_percent_cache
     True
