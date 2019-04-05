@@ -1,6 +1,14 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:sale.configuration:"
+msgid "You cannot change the sale margin method because has sales."
+msgstr "No podeu canviar el mètode marge venta perquè ja existeixen ventes."
+
+msgctxt "field:sale.configuration,sale_margin_method:"
+msgid "Sale Margin Method"
+msgstr "Mètode marge venda"
 
 msgctxt "field:sale.line,cost_price:"
 msgid "Cost Price"
@@ -37,6 +45,14 @@ msgid ""
 msgstr ""
 "Dóna la rendibilitat mitjançant el càlcul de la diferència entre el preu "
 "unitari i preu de cost."
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Cost Price"
+msgstr "Preu de cost"
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Unit Price"
+msgstr "Preu unitat"
 
 msgctxt "view:sale.line:"
 msgid "%"
