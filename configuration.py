@@ -31,31 +31,6 @@ class Configuration(metaclass=PoolMeta):
         return cls.multivalue_model(
             'sale_margin_method').default_sale_margin_method()
 
-    @classmethod
-    def __setup__(cls):
-        super(Configuration, cls).__setup__()
-        cls._modify_no_sale = [
-            ('sale_margin_method', 'change_sale_margin_method'),
-            ]
-
-    @classmethod
-    def write(cls, *args):
-        actions = iter(args)
-        for _, values in zip(actions, actions):
-            for field, error in cls._modify_no_sale:
-                    if field in values:
-                        cls.check_no_sale(error)
-                        break
-        super(Configuration, cls).write(*args)
-
-    @classmethod
-    def check_no_sale(cls, error):
-        Sale = Pool().get('sale.sale')
-
-        sales = Sale.search([], limit=1, order=[])
-        if sales:
-            raise UserError(gettext('sale_margin.msg_%s' % error))
-
 
 class ConfigurationSaleMethod(metaclass=PoolMeta):
     __name__ = 'sale.configuration.sale_method'
@@ -64,3 +39,24 @@ class ConfigurationSaleMethod(metaclass=PoolMeta):
     @classmethod
     def default_sale_margin_method(cls):
         return 'cost_price'
+
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+        for records, values in zip(actions, actions):
+            if not 'sale_margin_method' in values:
+                continue
+            for record in records:
+                current = record.sale_margin_method or 'cost_price'
+                if current != values['sale_margin_method']:
+                    cls.check_no_sale()
+        super().write(*args)
+
+    @classmethod
+    def check_no_sale(cls):
+        Sale = Pool().get('sale.sale')
+
+        sales = Sale.search([], limit=1, order=[])
+        if sales:
+            raise UserError(gettext(
+                    'sale_margin.msg_change_sale_margin_method'))
