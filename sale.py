@@ -10,6 +10,7 @@ from trytond.modules.product import price_digits
 
 __all__ = ['Sale', 'SaleLine']
 
+_ZERO = Decimal(0)
 
 class Sale:
     __metaclass__ = PoolMeta
@@ -48,7 +49,7 @@ class Sale:
                 and self.margin_cache is not None):
             return self.margin_cache
         margin = sum((l.margin for l in self.lines if l.type == 'line'),
-                Decimal(0))
+                _ZERO)
         return Currency.round(self.currency, margin)
 
     def get_margin_percent(self, name):
@@ -63,7 +64,7 @@ class Sale:
 
         price = sum(
             Decimal(str(fabs(l.quantity))) * (
-                getattr(l, sale_margin_method) or Decimal(0))
+                getattr(l, sale_margin_method) or _ZERO)
             for l in self.lines if l.type == 'line')
         if price:
             return (self.margin / price).quantize(Decimal('0.0001'))
@@ -111,7 +112,7 @@ class SaleLine:
 
     @staticmethod
     def default_cost_price():
-        return Decimal(0)
+        return _ZERO
 
     @fields.depends('product')
     def on_change_product(self):
@@ -128,29 +129,25 @@ class SaleLine:
         Return the margin of each sale lines
         '''
         Currency = Pool().get('currency.currency')
-        if not self.sale or not self.sale.currency:
-            return Decimal(0)
-        currency = self.sale.currency
-        if self.type == 'line':
-            if self.quantity and self.cost_price:
-                cost = Decimal(str(self.quantity)) * (self.cost_price)
-            else:
-                cost = Decimal(0)
-            self.amount = self.on_change_with_amount()
-            return Currency.round(currency, self.amount - cost)
-        elif self.type == 'subtotal':
-            cost = Decimal(0)
-            for line2 in self.sale.lines:
-                if self == line2:
-                    return cost
-                if line2.type == 'line':
-                    cost2 = Decimal(str(line2.quantity)) * (line2.cost_price or
-                        Decimal(0))
-                    cost += Currency.round(currency, line2.amount - cost2)
-                elif line2.type == 'subtotal':
-                    cost = Decimal(0)
-        else:
-            return Decimal(0)
+        cost = _ZERO
+        if self.sale and self.sale.currency:
+            currency = self.sale.currency
+            if self.type == 'line':
+                if self.quantity and self.cost_price:
+                    cost = Decimal(str(self.quantity)) * (self.cost_price)
+                self.amount = self.on_change_with_amount()
+                return Currency.round(currency, self.amount - cost)
+            elif self.type == 'subtotal':
+                for line2 in self.sale.lines:
+                    if self == line2:
+                        return cost
+                    if line2.type == 'line':
+                        cost_price = line2.cost_price or _ZERO
+                        cost2 = Decimal(str(line2.quantity)) * cost_price
+                        cost += Currency.round(currency, line2.amount - cost2)
+                    elif line2.type == 'subtotal':
+                        cost = _ZERO
+        return cost
 
     @fields.depends('type', 'quantity', 'cost_price', 'unit_price',
         '_parent_sale.currency', '_parent_sale.lines', methods=['margin'])
@@ -165,6 +162,7 @@ class SaleLine:
         self.margin = self.on_change_with_margin()
         if not self.margin:
             return
+        price = _ZERO
         if self.type == 'line':
             if not self.quantity:
                 return
@@ -178,7 +176,6 @@ class SaleLine:
                 price = self.get_margin_cost_price()
             return (self.margin / price).quantize(Decimal('0.0001'))
         else:
-            price = Decimal(0)
             for line2 in self.sale.lines:
                 if self == line2:
                     if not price:
@@ -192,12 +189,13 @@ class SaleLine:
                     else:
                         price += line2.get_margin_cost_price()
                 elif line2.type == 'subtotal':
-                    price = Decimal(0)
+                    price = _ZERO
+        return price
 
     def get_margin_cost_price(self):
         return Decimal(str(fabs(self.quantity))) * (self.cost_price or
-                Decimal(0))
+                _ZERO)
 
     def get_margin_unit_price(self):
         return Decimal(str(fabs(self.quantity))) * (self.unit_price or
-                Decimal(0))
+                _ZERO)
