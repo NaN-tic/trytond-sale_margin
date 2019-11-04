@@ -90,10 +90,8 @@ Create products::
     >>> template.account_category = account_category
     >>> template.default_uom = unit
     >>> template.type = 'goods'
-    >>> template.purchasable = True
     >>> template.salable = True
     >>> template.list_price = Decimal('10')
-    >>> template.supply_on_sale = True
     >>> product, = template.products
     >>> product.cost_price = Decimal('5')
     >>> template.save()
@@ -104,13 +102,9 @@ Create products::
     >>> template2.account_category = account_category
     >>> template2.default_uom = unit
     >>> template2.type = 'goods'
-    >>> template2.purchasable = True
     >>> template2.salable = True
     >>> template2.list_price = Decimal('80')
     >>> template2.cost_price = Decimal('50')
-    >>> template2.account_expense = expense
-    >>> template2.account_revenue = revenue
-    >>> template2.supply_on_sale = True
     >>> product2, = template2.products
     >>> product2.cost_price = Decimal('5')
     >>> template2.save()
