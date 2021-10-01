@@ -107,6 +107,7 @@ class SaleLine(metaclass=PoolMeta):
         super(SaleLine, cls).__setup__()
         if hasattr(cls, 'gross_unit_price'):
             cls.margin.on_change_with.add('gross_unit_price')
+            cls.margin_percent.on_change_with.add('gross_unit_price')
 
     @staticmethod
     def default_cost_price():
