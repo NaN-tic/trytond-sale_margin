@@ -114,6 +114,13 @@ Create payment term::
     >>> payment_term = create_payment_term()
     >>> payment_term.save()
 
+Change sale configuration::
+
+    >>> Configuration = Model.get('sale.configuration')
+    >>> configuration = Configuration(1)
+    >>> configuration.sale_margin_method = 'cost_price'
+    >>> configuration.save()
+
 Sale with 1 product::
 
     >>> config.user = sale_user.id
