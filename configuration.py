@@ -38,7 +38,7 @@ class ConfigurationSaleMethod(metaclass=PoolMeta):
 
     @classmethod
     def default_sale_margin_method(cls):
-        return 'cost_price'
+        return 'unit_price'
 
     @classmethod
     def write(cls, *args):
@@ -47,7 +47,7 @@ class ConfigurationSaleMethod(metaclass=PoolMeta):
             if not 'sale_margin_method' in values:
                 continue
             for record in records:
-                current = record.sale_margin_method or 'cost_price'
+                current = record.sale_margin_method or 'unit_price'
                 if current != values['sale_margin_method']:
                     cls.check_no_sale()
         super().write(*args)
