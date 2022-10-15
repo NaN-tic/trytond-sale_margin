@@ -113,9 +113,7 @@ class SaleLine(metaclass=PoolMeta):
     def on_change_product(self):
         super(SaleLine, self).on_change_product()
         if self.product:
-            cost_price = self.product.cost_price
-            self.cost_price = cost_price.quantize(
-                Decimal(1) / 10 ** self.__class__.cost_price.digits[1])
+            self.cost_price = self.product.cost_price
 
     @fields.depends('type', 'quantity', 'cost_price', '_parent_sale.currency',
         '_parent_sale.lines', methods=['on_change_with_amount'])
