@@ -109,16 +109,19 @@ class SaleLine(metaclass=PoolMeta):
     def default_cost_price():
         return _ZERO
 
-    @fields.depends('product')
+    @fields.depends('product', 'currency')
     def on_change_product(self):
         Currency = Pool().get('currency.currency')
 
         super(SaleLine, self).on_change_product()
 
         if self.product:
-            cost_price = Currency.compute(
-                self.sale.company.currency, self.product.cost_price,
-                self.sale.currency, round=False)
+            if self.currency:
+                cost_price = Currency.compute(
+                    self.currency, self.product.cost_price,
+                    self.sale.currency, round=False)
+            else:
+                cost_price = self.product.cost_price
             self.cost_price = cost_price
 
     @fields.depends('type', 'quantity', 'cost_price', '_parent_sale.currency',
