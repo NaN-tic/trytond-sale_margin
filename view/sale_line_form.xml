@@ -12,7 +12,7 @@ copyright notices and license terms. -->
     <xpath
         expr="/form/notebook/page/field[@name=&quot;amount&quot;]"
         position="after">
-        <label name="margin" xalign="1.0" xexpand="1"/>
+        <label name="margin" xalign="1.0"/>
         <group id="margin_values" colspan="1" col="3">
             <field name="margin" xalign="1.0" xexpand="0"/>
             <field name="margin_percent" factor="100" xalign="1.0" xexpand="0"/>
