@@ -13,16 +13,28 @@ SALE_MARGIN_METHOD = [
     ('cost_price', 'Cost Price'),
     ]
 sale_margin_method = fields.Selection(SALE_MARGIN_METHOD, 'Sale Margin Method')
+SALE_MARGIN_MINIMUM_ACTION = [
+    ('warning', 'Warning'),
+    ('block', 'Block'),
+    ]
+sale_margin_minimum = fields.Numeric(
+    'Minimum Margin %', digits=(16, 4))
+sale_margin_minimum_action = fields.Selection(
+    SALE_MARGIN_MINIMUM_ACTION, 'Minimum Margin Action')
 
 
 class Configuration(metaclass=PoolMeta):
     __name__ = 'sale.configuration'
     sale_margin_method = fields.MultiValue(sale_margin_method)
+    sale_margin_minimum = fields.MultiValue(sale_margin_minimum)
+    sale_margin_minimum_action = fields.MultiValue(sale_margin_minimum_action)
 
     @classmethod
     def multivalue_model(cls, field):
         pool = Pool()
-        if field == 'sale_margin_method':
+        if field in {
+                'sale_margin_method', 'sale_margin_minimum',
+                'sale_margin_minimum_action'}:
             return pool.get('sale.configuration.sale_method')
         return super(Configuration, cls).multivalue_model(field)
 
@@ -35,10 +47,20 @@ class Configuration(metaclass=PoolMeta):
 class ConfigurationSaleMethod(metaclass=PoolMeta):
     __name__ = 'sale.configuration.sale_method'
     sale_margin_method = sale_margin_method
+    sale_margin_minimum = sale_margin_minimum
+    sale_margin_minimum_action = sale_margin_minimum_action
 
     @classmethod
     def default_sale_margin_method(cls):
         return 'unit_price'
+
+    @classmethod
+    def default_sale_margin_minimum(cls):
+        return None
+
+    @classmethod
+    def default_sale_margin_minimum_action(cls):
+        return 'warning'
 
     @classmethod
     def write(cls, *args):

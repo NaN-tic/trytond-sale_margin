@@ -5,5 +5,9 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='sale_shipment_method']" position="after">
         <label name="sale_margin_method" />
         <field name="sale_margin_method" />
+        <label name="sale_margin_minimum" />
+        <field name="sale_margin_minimum" factor="100" />
+        <label name="sale_margin_minimum_action" />
+        <field name="sale_margin_minimum_action" />
     </xpath>
 </data>

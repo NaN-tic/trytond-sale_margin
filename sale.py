@@ -3,11 +3,13 @@
 # the full copyright notices and license terms.
 from decimal import Decimal
 from math import fabs
-from trytond.model import fields
+from trytond.model import ModelView, Workflow, fields
 from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.product import price_digits
 from trytond.modules.currency.fields import Monetary
+from trytond.i18n import gettext
+from trytond.exceptions import UserError, UserWarning
 
 __all__ = ['Sale', 'SaleLine']
 
@@ -76,6 +78,52 @@ class Sale(metaclass=PoolMeta):
                     'margin_cache': sale.margin,
                     'margin_percent_cache': sale.margin_percent,
                     })
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('quotation')
+    def quote(cls, sales):
+        cls._check_margin_minimum(sales)
+        super().quote(sales)
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('confirmed')
+    def confirm(cls, sales):
+        cls._check_margin_minimum(sales)
+        super().confirm(sales)
+
+    @classmethod
+    def _check_margin_minimum(cls, sales):
+        for sale in sales:
+            sale.check_margin_minimum()
+
+    def check_margin_minimum(self):
+        pool = Pool()
+        Configuration = pool.get('sale.configuration')
+        Warning = pool.get('res.user.warning')
+        Lang = pool.get('ir.lang')
+
+        config = Configuration(1)
+        minimum = config.sale_margin_minimum
+        if minimum is None or self.margin_percent is None:
+            return
+        if self.margin_percent >= minimum:
+            return
+
+        lang = Lang.get()
+        message = gettext(
+            'sale_margin.msg_sale_margin_minimum',
+            sale=self.rec_name,
+            margin=lang.format_number(self.margin_percent * 100),
+            minimum=lang.format_number(minimum * 100))
+
+        if config.sale_margin_minimum_action == 'block':
+            raise UserError(message)
+
+        warning_name = Warning.format('sale_margin_minimum', [self])
+        if Warning.check(warning_name):
+            raise UserWarning(warning_name, message)
 
 
 class SaleLine(metaclass=PoolMeta):
