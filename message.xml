@@ -6,5 +6,8 @@
             <record model="ir.message" id="msg_change_sale_margin_method">
                 <field name="text">You cannot change the sale margin method because has sales.</field>
             </record>
+            <record model="ir.message" id="msg_sale_margin_minimum">
+                <field name="text">The margin for sale "%(sale)s" is "%(margin)s%%" which is below the minimum "%(minimum)s%%".</field>
+            </record>
         </data>
     </tryton>
