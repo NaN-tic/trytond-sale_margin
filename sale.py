@@ -22,11 +22,11 @@ class Sale(metaclass=PoolMeta):
             'between the Unit Price and Cost Price.')),
         'get_margin')
     margin_cache = Monetary('Margin Cache',
-        currency='currency', digits='currency', readonly=True)
+        currency='currency', digits='currency', states={'editable': False})
     margin_percent = fields.Function(fields.Numeric('Margin (%)',
         digits=(16, 4)), 'get_margin_percent')
     margin_percent_cache = fields.Numeric('Margin (%) Cache',
-        digits=(16, 4), readonly=True)
+        digits=(16, 4), states={'editable': False})
 
     @classmethod
     def copy(cls, sales, default=None):
