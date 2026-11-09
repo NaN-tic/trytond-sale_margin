@@ -1,0 +1,81 @@
+#
+msgid ""
+msgstr ""
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "field:sale.configuration,sale_margin_method:"
+msgid "Sale Margin Method"
+msgstr "Értékesítési árrés számítási módja"
+
+msgctxt "field:sale.line,cost_price:"
+msgid "Cost Price"
+msgstr "Költségár"
+
+msgctxt "field:sale.line,margin:"
+msgid "Margin"
+msgstr "Árrés"
+
+msgctxt "field:sale.line,margin_percent:"
+msgid "Margin (%)"
+msgstr "Árrés (%)"
+
+msgctxt "field:sale.sale,margin:"
+msgid "Margin"
+msgstr "Árrés"
+
+msgctxt "field:sale.sale,margin_cache:"
+msgid "Margin Cache"
+msgstr "Árrés gyorsítótára"
+
+msgctxt "field:sale.sale,margin_percent:"
+msgid "Margin (%)"
+msgstr "Árrés (%)"
+
+msgctxt "field:sale.sale,margin_percent_cache:"
+msgid "Margin (%) Cache"
+msgstr "Árrés (%) gyorsítótára"
+
+msgctxt "help:sale.sale,margin:"
+msgid ""
+"It gives profitability by calculating the difference between the Unit Price "
+"and Cost Price."
+msgstr ""
+"Az egységár és az önköltségi ár különbségéből számítja a jövedelmezőséget."
+
+msgctxt "model:ir.message,text:msg_change_sale_margin_method"
+msgid "You cannot change the sale margin method because has sales."
+msgstr ""
+"Az értékesítési árrés számítási módja nem módosítható, mert már vannak "
+"értékesítések."
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Cost Price"
+msgstr "Költségár"
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Unit Price"
+msgstr "Egységár"
+
+msgctxt "view:sale.line:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:sale.sale:"
+msgid "%"
+msgstr "%"
+
+msgctxt "field:sale.configuration.sale_method,sale_margin_method:"
+msgid "Sale Margin Method"
+msgstr "Értékesítési árrés számítási módja"
+
+msgctxt "selection:sale.configuration.sale_method,sale_margin_method:"
+msgid "Cost Price"
+msgstr "Költségár"
+
+msgctxt "selection:sale.configuration.sale_method,sale_margin_method:"
+msgid "Unit Price"
+msgstr "Egységár"
