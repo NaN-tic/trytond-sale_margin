@@ -1,0 +1,78 @@
+#
+msgid ""
+msgstr ""
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "field:sale.configuration,sale_margin_method:"
+msgid "Sale Margin Method"
+msgstr "វិធីគណនារឹមប្រាក់ចំណេញពីការលក់"
+
+msgctxt "field:sale.line,cost_price:"
+msgid "Cost Price"
+msgstr "ថ្លៃដើម"
+
+msgctxt "field:sale.line,margin:"
+msgid "Margin"
+msgstr "រឹមប្រាក់ចំណេញ"
+
+msgctxt "field:sale.line,margin_percent:"
+msgid "Margin (%)"
+msgstr "រឹមប្រាក់ចំណេញ (%)"
+
+msgctxt "field:sale.sale,margin:"
+msgid "Margin"
+msgstr "រឹមប្រាក់ចំណេញ"
+
+msgctxt "field:sale.sale,margin_cache:"
+msgid "Margin Cache"
+msgstr "ឃ្លាំងបណ្ដោះអាសន្ននៃរឹមប្រាក់ចំណេញ"
+
+msgctxt "field:sale.sale,margin_percent:"
+msgid "Margin (%)"
+msgstr "រឹមប្រាក់ចំណេញ (%)"
+
+msgctxt "field:sale.sale,margin_percent_cache:"
+msgid "Margin (%) Cache"
+msgstr "ឃ្លាំងបណ្ដោះអាសន្ននៃរឹមប្រាក់ចំណេញ (%)"
+
+msgctxt "help:sale.sale,margin:"
+msgid ""
+"It gives profitability by calculating the difference between the Unit Price "
+"and Cost Price."
+msgstr "បង្ហាញប្រាក់ចំណេញដោយគណនាភាពខុសគ្នារវាងតម្លៃឯកតា និងថ្លៃដើម។"
+
+msgctxt "model:ir.message,text:msg_change_sale_margin_method"
+msgid "You cannot change the sale margin method because has sales."
+msgstr "មិនអាចប្ដូរវិធីគណនារឹមប្រាក់ចំណេញពីការលក់បានទេ ព្រោះមានការលក់រួចហើយ។"
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Cost Price"
+msgstr "ថ្លៃដើម"
+
+msgctxt "selection:sale.configuration,sale_margin_method:"
+msgid "Unit Price"
+msgstr "តម្លៃឯកតា"
+
+msgctxt "view:sale.line:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:sale.sale:"
+msgid "%"
+msgstr "%"
+
+msgctxt "field:sale.configuration.sale_method,sale_margin_method:"
+msgid "Sale Margin Method"
+msgstr "វិធីគណនារឹមប្រាក់ចំណេញពីការលក់"
+
+msgctxt "selection:sale.configuration.sale_method,sale_margin_method:"
+msgid "Cost Price"
+msgstr "ថ្លៃដើម"
+
+msgctxt "selection:sale.configuration.sale_method,sale_margin_method:"
+msgid "Unit Price"
+msgstr "តម្លៃឯកតា"
